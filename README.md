@@ -37,20 +37,22 @@ from the analysisng of the data we found that
 -- FROM hr
 -- GROUP BY location;
 
--- - How does the gender distribution vary across departments and job titles?
--- SELECT department, gender, COUNT(*) as count
--- FROM hr
--- GROUP BY department, gender
--- ORDER BY department;
-
---- How does the gender distribution vary across departments and job titles?
-select jobtitle, max(count) Max_jobtitle
--- , min(count) min_jobtitle
-from(
-SELECT jobtitle, COUNT(*) as count
+-- - How does the gender distribution vary across departments?
+select department ,sum(Male) as Male, sum(Female)as Female
+ from 
+(SELECT  department,COUNT(*) as Male, 0 as Female
 FROM hr
-GROUP BY jobtitle
-ORDER BY jobtitle DESC);
+where gender = 'Male'
+GROUP BY department
+union ALL
+SELECT  department,0 as Male,COUNT(*) as Female
+FROM hr
+where gender = 'Female'
+GROUP BY department
+--ORDER BY department 
+)
+--where department = 'Services'
+GROUP BY department 
 
 --- What is the distribution of employees across locations by state?
 -- SELECT location_state, COUNT(*) as count
